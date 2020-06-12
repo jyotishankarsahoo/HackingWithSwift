@@ -32,20 +32,27 @@ final class ViewController: UITableViewController {
 		} else {
 			urlString = "https://www.hackingwithswift.com/samples/petitions-2.json"
 		}
-		if let url = URL(string: urlString) {
-			if let data = try? Data(contentsOf: url) {
-				parseData(data: data)
-				return
+		let queue = DispatchQueue.global(qos: .userInitiated)
+		queue.async { [weak self] in
+			if let url = URL(string: urlString) {
+				if let data = try? Data(contentsOf: url) {
+					self?.parseData(data: data)
+					return
+				}
+			}
+			DispatchQueue.main.async { [weak self] in
+				self?.showError()
 			}
 		}
-		showError()
 	}
 	private func parseData(data: Data) {
 		let decode = JSONDecoder()
 		if let decodedJson = try? decode.decode(Petitions.self, from: data) {
 			recentPetitions = decodedJson.results
 			filteredPetitions = recentPetitions
-			tableView.reloadData()
+			DispatchQueue.main.async { [weak self] in
+				self?.tableView.reloadData()
+			}
 		}
 	}
 	private func showError() {
