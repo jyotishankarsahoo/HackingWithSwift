@@ -28,8 +28,15 @@ final class ViewController: UITableViewController {
 	fileprivate func setUpDatasource() {
 		let fileManager = FileManager.default
 		let resourcesPath = Bundle.main.resourcePath!
-		let content = try! fileManager.contentsOfDirectory(atPath: resourcesPath)
-		_ = content.filter({ $0.hasPrefix("nssl")}).map({ images.append($0) })
+		DispatchQueue.global(qos: .userInitiated).async {
+			let content = try! fileManager.contentsOfDirectory(atPath: resourcesPath)
+			DispatchQueue.main.async { [weak self] in
+				_ = content.filter({ $0.hasPrefix("nssl")}).map({
+					self?.images.append($0)
+					self?.tableView.reloadData()
+				})
+			}
+		}
 	}
 
 	@objc func shareApp() {
