@@ -18,12 +18,14 @@ class ViewController: UIViewController {
 	var score = 0
 	var correctAnswer = 0
 	var numberOfQuestionAsked = 0
+	let userDefault = UserDefaults.standard
 	//MARK: - View Life Cycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
 		setUpButtons()
 		askQuestion()
+		saveScore(score: score)
 	}
 //MARK: -  Private Methods
 	fileprivate func setUpButtons() {
@@ -38,7 +40,7 @@ class ViewController: UIViewController {
 		askQuestion()
 	}
 	fileprivate func askQuestion(sender: UIAlertAction! = nil) {
-		guard numberOfQuestionAsked < 3 else {
+		guard numberOfQuestionAsked <= 5 else {
 			showAlert(with: "Final Result", msg: "Your Final Score is \(score) of \(numberOfQuestionAsked)", handler: resetQuestion)
 			return
 		}
@@ -52,6 +54,11 @@ class ViewController: UIViewController {
 		
 	}
 	fileprivate func showAlert(with title: String, msg: String, handler: ((UIAlertAction) -> Void)?) {
+		if let currentAlertVC = self.presentedViewController as? UIAlertController {
+			currentAlertVC.message = msg
+			currentAlertVC.title = title
+			return
+		}
 		let alertController = UIAlertController(title: title, message: msg, preferredStyle: .alert)
 		alertController.addAction(UIAlertAction(title: "Continue", style: .default, handler: handler))
 		present(alertController, animated: true, completion: nil)
@@ -70,6 +77,13 @@ class ViewController: UIViewController {
 			msg = "Thats the flag for \(countries[sender.tag])"
 		}
 		showAlert(with: title, msg: msg, handler: askQuestion)
+		saveScore(score: score)
+	}
+	func saveScore(score: Int) {
+		if score > userDefault.integer(forKey: "heightScore") {
+			userDefault.set(score, forKey: "heightScore")
+			showAlert(with: "New HighScore", msg: "Score: \(score)", handler: nil)
+		}
 	}
 }
 
