@@ -15,6 +15,7 @@ class ViewController: UICollectionViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addPhoto))
+		retrivePhoto()
 	}
 
 	//MARK: - @objc Selector
@@ -46,10 +47,29 @@ class ViewController: UICollectionViewController {
 			guard let sself = self, let ansTextField = ac?.textFields, let enteredName = ansTextField[0].text else { return }
 			let personModel = sself.personInfoList[indexPath.row]
 			personModel.name = enteredName
+			sself.savePhoto()
 			sself.collectionView.reloadData()
 		}))
 		ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 		present(ac, animated: true)
+	}
+	func savePhoto() {
+		let jsonEncoder = JSONEncoder()
+		if let encodedData = try? jsonEncoder.encode(personInfoList) {
+			let userDefault = UserDefaults.standard
+			userDefault.set(encodedData, forKey: "PersonData")
+		}
+	}
+	
+	func retrivePhoto() {
+		let userDefault = UserDefaults.standard
+		guard let retrivedData =  userDefault.object(forKey: "PersonData") as? Data else { return }
+		let jsonDecoder = JSONDecoder()
+		do {
+			personInfoList = try jsonDecoder.decode([Person].self, from: retrivedData)
+		} catch (let error){
+			print("error: \(error.localizedDescription)")
+		}
 	}
 }
 
@@ -61,6 +81,7 @@ extension ViewController: UINavigationControllerDelegate, UIImagePickerControlle
 			let imageFilePath = getDocumentDirectory().appendingPathComponent(imageName)
 			if let _ = try? jpegData.write(to: imageFilePath) {
 				personInfoList.append(Person(name: "Unknown", imageString: imageName))
+				savePhoto()
 				collectionView.reloadData()
 			}
 		}

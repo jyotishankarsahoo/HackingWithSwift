@@ -12,5 +12,10 @@ class CustomCollectionCell: UICollectionViewCell {
 
 	@IBOutlet weak var imageView: UIImageView!
 	@IBOutlet weak var nameLabel: UILabel!
-
+	override func draw(_ rect: CGRect) {
+		super.draw(rect)
+		imageView.layer.borderColor = UIColor.lightGray.cgColor
+		imageView.layer.borderWidth = 1
+		imageView.layer.cornerRadius = 10
+	}
 }
