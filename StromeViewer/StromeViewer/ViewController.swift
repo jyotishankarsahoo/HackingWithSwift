@@ -8,10 +8,13 @@
 
 import UIKit
 
+protocol ListUpdatable: class {
+	func updateViewCount(_ info: ImageInfo, index: Int)
+}
 final class ViewController: UITableViewController {
 
-	var images = [String]()
-
+	var images = [ImageInfo]()
+	var viewCount = 0
 	//MARK: - View Life Cycle
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -32,9 +35,9 @@ final class ViewController: UITableViewController {
 			let content = try! fileManager.contentsOfDirectory(atPath: resourcesPath)
 			DispatchQueue.main.async { [weak self] in
 				_ = content.filter({ $0.hasPrefix("nssl")}).map({
-					self?.images.append($0)
-					self?.tableView.reloadData()
+					self?.images.append(ImageInfo(name: $0, viewCount: 0))
 				})
+				self?.tableView.reloadData()
 			}
 		}
 	}
@@ -51,18 +54,30 @@ final class ViewController: UITableViewController {
 	}
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "imageCell", for: indexPath)
-		cell.textLabel?.text = images[indexPath.row]
+		let imageInfo = images[indexPath.row]
+		cell.textLabel?.text = imageInfo.name
+		cell.detailTextLabel?.text = "View Count: \(imageInfo.viewCount)"
 		cell.accessoryType = .disclosureIndicator
 		return cell
 	}
 	//MARK: - Table View Delegate
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		guard let detailedVC = storyboard?.instantiateViewController(withIdentifier: "detailedViewController") as? DetailedViewController else { return }
-		detailedVC.imageName = images[indexPath.row]
+		var imageInfo = images[indexPath.row]
+		imageInfo.viewCount += 1
+		detailedVC.delegate = self
+		detailedVC.imageInfo = imageInfo
 		detailedVC.imageCount = images.count
-		detailedVC.imageIndex = indexPath.row + 1
+		detailedVC.imageIndex = indexPath.row
 		navigationController?.pushViewController(detailedVC, animated: true)
 	}
-	
+}
+
+extension ViewController: ListUpdatable {
+	func updateViewCount(_ info: ImageInfo, index: Int) {
+		print("Referesh list")
+		images[index] = info
+		tableView.reloadData()
+	}
 }
 

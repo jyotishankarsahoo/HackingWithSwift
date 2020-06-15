@@ -24,6 +24,7 @@
 		E8BAC931248B03DC0073DC47 /* nssl0033.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E8BAC927248B03DC0073DC47 /* nssl0033.jpg */; };
 		E8BAC932248B03DC0073DC47 /* nssl0034.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E8BAC928248B03DC0073DC47 /* nssl0034.jpg */; };
 		E8BAC934248B07730073DC47 /* DetailedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BAC933248B07730073DC47 /* DetailedViewController.swift */; };
+		E8BACA3D2496EB950073DC47 /* ImageInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8BACA3C2496EB950073DC47 /* ImageInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		E8BAC927248B03DC0073DC47 /* nssl0033.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = nssl0033.jpg; sourceTree = "<group>"; };
 		E8BAC928248B03DC0073DC47 /* nssl0034.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = nssl0034.jpg; sourceTree = "<group>"; };
 		E8BAC933248B07730073DC47 /* DetailedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedViewController.swift; sourceTree = "<group>"; };
+		E8BACA3C2496EB950073DC47 /* ImageInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 			children = (
 				E8BAC8F724898A410073DC47 /* AppDelegate.swift */,
 				E8BAC8F924898A410073DC47 /* SceneDelegate.swift */,
+				E8BACA3C2496EB950073DC47 /* ImageInfo.swift */,
 				E8BAC8FB24898A410073DC47 /* ViewController.swift */,
 				E8BAC933248B07730073DC47 /* DetailedViewController.swift */,
 				E8BAC8FD24898A410073DC47 /* Main.storyboard */,
@@ -190,6 +193,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8BAC8FC24898A410073DC47 /* ViewController.swift in Sources */,
+				E8BACA3D2496EB950073DC47 /* ImageInfo.swift in Sources */,
 				E8BAC8F824898A410073DC47 /* AppDelegate.swift in Sources */,
 				E8BAC934248B07730073DC47 /* DetailedViewController.swift in Sources */,
 				E8BAC8FA24898A410073DC47 /* SceneDelegate.swift in Sources */,
